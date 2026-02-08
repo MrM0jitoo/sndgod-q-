@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Миньон</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #808080;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .minion-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.2s;
+            outline: none;
+        }
+        
+        .minion-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .minion-button:active {
+            transform: scale(0.95);
+        }
+        
+        .minion-img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #333;
+        }
+        
+        .mute-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: none;
+        }
+        
+        .mute-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <button class="minion-button" id="minionButton">
+        <img src="https://i.imgur.com/4qYj7nN.png" alt="Миньон с бородой" class="minion-img">
+    </button>
+    
+    <button class="mute-button" id="muteButton">Заглушить</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const minionButton = document.getElementById('minionButton');
+            const muteButton = document.getElementById('muteButton');
+            
+            // Создаем элемент для звука
+            const audio = new Audio();
+            let soundStarted = false;
+            
+            // Обработчик нажатия на миньона
+            minionButton.addEventListener('click', function() {
+                if (!soundStarted) {
+                    // ЗАМЕНИТЕ ЭТУ ССЫЛКУ НА СВОЙ ЗВУКОВОЙ ФАЙЛ
+                    audio.src = 'https://www.myinstants.com/media/sounds/diadia-sasha_K0Xb9eR.mp3';
+                    audio.loop = true;
+                    
+                    // Пытаемся запустить звук
+                    audio.play().then(() => {
+                        console.log('Звук запущен');
+                        soundStarted = true;
+                        muteButton.style.display = 'block';
+                    }).catch(error => {
+                        console.error('Ошибка воспроизведения:', error);
+                        // Если не удалось автоматически, все равно покажем кнопку
+                        soundStarted = true;
+                        muteButton.style.display = 'block';
+                    });
+                }
+            });
+            
+            // Обработчик нажатия на кнопку "Заглушить"
+            muteButton.addEventListener('click', function() {
+                // Перенаправляем в Telegram
+                window.location.href = 'https://t.me/telegram';
+            });
+        });
+    </script>
+</body>
+</html>
