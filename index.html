@@ -1,98 +1,206 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Миньон</title>
+    <title>SndGod</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            background-color: #808080;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-sizing: border-box;
         }
         
-        .minion-button {
+        body {
+            background-color: #1a1a1a;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            overflow: hidden;
+        }
+        
+        .title {
+            color: #ffffff;
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 60px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+        }
+        
+        .container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        
+        .sndgod-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: none;
             border: none;
             cursor: pointer;
             padding: 0;
-            transition: transform 0.2s;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             outline: none;
+            z-index: 2;
         }
         
-        .minion-button:hover {
-            transform: scale(1.05);
-        }
-        
-        .minion-button:active {
-            transform: scale(0.95);
-        }
-        
-        .minion-img {
-            width: 300px;
-            height: 300px;
+        .sndgod-image {
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid #333;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .sndgod-button.active {
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+        
+        .sndgod-button.active .sndgod-image {
+            border-color: rgba(0, 122, 255, 0.6);
+            box-shadow: 
+                0 0 40px rgba(0, 122, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
         
         .mute-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #333;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #007aff, #0056cc);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 16px 32px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 16px;
-            display: none;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 
+                0 10px 30px rgba(0, 122, 255, 0.4),
+                0 1px 0 rgba(255, 255, 255, 0.1) inset;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1;
+            width: 200px;
+            justify-content: center;
+        }
+        
+        .mute-button.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 100px);
         }
         
         .mute-button:hover {
-            background-color: #555;
+            background: linear-gradient(145deg, #0056cc, #0047a8);
+            transform: translate(-50%, 98px);
+            box-shadow: 
+                0 15px 40px rgba(0, 122, 255, 0.5),
+                0 1px 0 rgba(255, 255, 255, 0.1) inset;
+        }
+        
+        .telegram-icon {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+        }
+        
+        .pulse-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 122, 255, 0);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .pulse-ring.active {
+            animation: pulse 2s infinite;
+            border-color: rgba(0, 122, 255, 0.6);
+            opacity: 1;
+        }
+        
+        @keyframes pulse {
+            0% {
+                width: 220px;
+                height: 220px;
+                opacity: 0.8;
+            }
+            70% {
+                opacity: 0.4;
+            }
+            100% {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
-    <button class="minion-button" id="minionButton">
-        <img src="https://yt3.googleusercontent.com/XkLVNVDvEvF7cXWMyK6Fh3YXrwFepWqq9j4glPb4caCVaYyF5UF41lOOdtyEHjRyQz-7OBiq=s900-c-k-c0x00ffffff-no-rj" alt="Миньон с бородой" class="minion-img">
-    </button>
+    <div class="title">SndGod</div>
     
-    <button class="mute-button" id="muteButton">Заглушить</button>
-
+    <div class="container">
+        <div class="pulse-ring" id="pulseRing"></div>
+        
+        <button class="sndgod-button" id="sndgodButton">
+            <img src="https://yt3.googleusercontent.com/XkLVNVDvEvF7cXWMyK6Fh3YXrwFepWqq9j4glPb4caCVaYyF5UF41lOOdtyEHjRyQz-7OBiq=s900-c-k-c0x00ffffff-no-rj" alt="SndGod" class="sndgod-image">
+        </button>
+        
+        <a href="https://t.me/telegram/sounddgod" class="mute-button" id="muteButton" target="_blank">
+            <img src="https://telegram.org/img/t_logo.svg" alt="Telegram" class="telegram-icon">
+            Заглушить
+        </a>
+    </div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const minionButton = document.getElementById('minionButton');
+            const sndgodButton = document.getElementById('sndgodButton');
             const muteButton = document.getElementById('muteButton');
-            
-            // Создаем элемент для звука
-            const audio = new Audio();
+            const pulseRing = document.getElementById('pulseRing');
             let soundStarted = false;
             
-            // Обработчик нажатия на миньона
-            minionButton.addEventListener('click', function() {
+            sndgodButton.addEventListener('click', function() {
                 if (!soundStarted) {
-                    // ЗАМЕНИТЕ ЭТУ ССЫЛКУ НА СВОЙ ЗВУКОВОЙ ФАЙЛ
+                    sndgodButton.classList.add('active');
+                    pulseRing.classList.add('active');
+                    
+                    const audio = new Audio();
                     audio.src = 'https://www.myinstants.com/media/sounds/gudok-poezda.mp3';
                     audio.loop = true;
+                    audio.play().catch(e => console.log('Ошибка:', e));
                     
-                    // Пытаемся запустить звук
-                    audio.play().then(() => {
-                        console.log('Звук запущен');
-                        soundStarted = true;
-                        muteButton.style.display = 'block';
-                    }).catch(error => {
-                        console.error('Ошибка воспроизведения:', error);
-                        // Если не удалось автоматически, все равно покажем кнопку
-                        soundStarted = true;
-                        muteButton.style.display = 'block';
-                    });
+                    setTimeout(() => {
+                        muteButton.classList.add('visible');
+                    }, 300);
+                    
+                    soundStarted = true;
                 }
             });
         });
